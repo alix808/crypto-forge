@@ -17,10 +17,10 @@ export const setLoading = (boolean) => ({
 
 // fetch crypto prices from the crypto compare api
 export const getCryptoPrices = (cur) => async (dispatch) => {
-  // dispatch({
-  //   type: SET_LOADING,
-  //   payload: true,
-  // });
+  dispatch({
+    type: SET_LOADING,
+    payload: true,
+  });
 
   try {
     const res = await axios.get(
@@ -44,24 +44,3 @@ export const setCurrency = (cur) => ({
   type: SET_CURRENCY,
   payload: cur,
 });
-
-// check cur matches the prices array
-export const checkMatch = (cur, prices) => async (dispatch) => {
-  let object = prices[0].DISPLAY;
-
-  let keyNames = Object.keys(object);
-
-  if (keyNames[0] === cur.toString()) {
-    dispatch({
-      type: SET_LOADING,
-      payload: false,
-    });
-  }
-
-  if (keyNames[0] !== cur.toString()) {
-    dispatch({
-      type: SET_LOADING,
-      payload: true,
-    });
-  }
-};

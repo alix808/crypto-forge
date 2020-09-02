@@ -1,8 +1,6 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import CurrencySelector from '../currency-selector/currency-selector';
 import { connect } from 'react-redux';
-
-import { checkMatch } from '../../redux/crypto/crypto.actions';
 
 import Spinner from '../spinner/spinner';
 
@@ -29,14 +27,22 @@ const Header = () => (
   </Row>
 );
 
-const CryptoPrices = ({ prices, cur, loading, checkMatch }) => {
-  useEffect(() => {
-    if (prices) {
-      checkMatch(cur, prices);
-    }
+const CryptoPrices = ({ prices, loading }) => {
+  const returnImageUrl = (m) => {
+    return Object.values(m)[0].IMAGEURL;
+  };
 
-    // eslint-disable-next-line
-  }, [cur, prices]);
+  const returnPrice = (m) => {
+    return Object.values(m)[0].PRICE;
+  };
+
+  const returnMktCap = (m) => {
+    return Object.values(m)[0].MKTCAP;
+  };
+
+  const returnChange = (m) => {
+    return Object.values(m)[0].CHANGEPCTDAY;
+  };
 
   // function to calculate color of each coin’s 24h change
   const changeHelper = (percent) => {
@@ -61,24 +67,24 @@ const CryptoPrices = ({ prices, cur, loading, checkMatch }) => {
         <Row key={i.CoinInfo.Id}>
           <Item>
             <Image
-              imageUrl={`https://www.cryptocompare.com/${
-                i.DISPLAY[cur.toString()].IMAGEURL
-              }`}
+              imageUrl={`https://www.cryptocompare.com/${returnImageUrl(
+                i.DISPLAY
+              )}`}
             />
           </Item>
           <StyledLink to={`/coin/${i.CoinInfo.Id}`}>
             {i.CoinInfo.Name}
           </StyledLink>
-          <Item>{i.DISPLAY[cur.toString()].PRICE}</Item>
-          <Item>{i.DISPLAY[cur.toString()].MKTCAP}</Item>
-          {changeHelper(i.DISPLAY[cur.toString()].CHANGEPCTDAY) ? (
+          <Item>{returnPrice(i.DISPLAY)}</Item>
+          <Item>{returnMktCap(i.DISPLAY)}</Item>
+          {changeHelper(returnChange(i.DISPLAY)) ? (
             <Green>
-              {i.DISPLAY[cur.toString()].CHANGEPCTDAY}
+              {returnChange(i.DISPLAY)}
               <Icon className='fas fa-arrow-up' />
             </Green>
           ) : (
             <Red>
-              {i.DISPLAY[cur.toString()].CHANGEPCTDAY}
+              {returnChange(i.DISPLAY)}
               <Icon className='fas fa-arrow-down' />
             </Red>
           )}
@@ -102,4 +108,4 @@ const mapStateToProps = (state) => ({
   match: state.crypto.match,
 });
 
-export default connect(mapStateToProps, { checkMatch })(CryptoPrices);
+export default connect(mapStateToProps)(CryptoPrices);

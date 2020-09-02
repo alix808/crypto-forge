@@ -9,13 +9,15 @@ import './App.css';
 function App({ getCryptoPrices, cur }) {
   useEffect(() => {
     // fetch crypto prices on render
-    setTimeout(() => {
-      getCryptoPrices(cur);
+    getCryptoPrices(cur);
+    // eslint-disable-next-line
+  }, [cur]);
 
-      setInterval(() => {
-        getCryptoPrices(cur);
-      }, 60000);
-    }, 0);
+  useEffect(() => {
+    // update every minute
+    setInterval(() => {
+      getCryptoPrices(cur);
+    }, 60000);
 
     // eslint-disable-next-line
   }, [cur]);

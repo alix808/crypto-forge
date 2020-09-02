@@ -24,6 +24,7 @@ const cryptoReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         prices: action.payload,
+        loading: false,
       };
 
     case ERROR:
@@ -35,7 +36,6 @@ const cryptoReducer = (state = INITIAL_STATE, action) => {
     case SET_CURRENCY:
       return {
         ...state,
-        loading: true,
         cur: action.payload,
       };
 
